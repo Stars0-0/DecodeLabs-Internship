@@ -20,10 +20,10 @@ The track progresses from pure rule-based logic → semantic understanding → f
 
 | # | Project | Concepts | Status |
 |---|---------|----------|--------|
-| 01 | [🤖 Rule-Based AI Chatbot](./Project-1-Rule-Based-Chatbot/) | IPO Model, Dictionary Lookup O(1), Input Sanitization, Control Flow | ✅ Complete |
-| 02 | 🧠 Semantic Chatbot *(coming soon)* | Vector Embeddings, Semantic Matching | 🔒 Locked |
-| 03 | 📊 Project 3 *(coming soon)* | TBD | 🔒 Locked |
-| 04 | 🌐 Project 4 *(coming soon)* | TBD | 🔒 Locked |
+| 01 | [ Rule-Based AI Chatbot](./Project-1-Rule-Based-Chatbot/) | IPO Model, Dictionary Lookup O(1), Input Sanitization, Control Flow | ✅ Complete |
+| 02 |  Semantic Chatbot *(coming soon)* | Vector Embeddings, Semantic Matching | 🔒 Locked |
+| 03 |  Project 3 *(coming soon)* | TBD | 🔒 Locked |
+| 04 |  Project 4 *(coming soon)* | TBD | 🔒 Locked |
 
 ---
 
