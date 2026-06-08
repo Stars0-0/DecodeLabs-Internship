@@ -1,4 +1,3 @@
-# DecodeLabs-Internship
 AI Engineering Projects - DecodeLabs Batch 2026
 
 # 🚀 DecodeLabs Internship Portfolio
