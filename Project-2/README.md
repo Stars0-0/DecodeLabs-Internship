@@ -121,10 +121,10 @@ Predicted class: 👉 SETOSA
 ## 📁 Project Structure
 
 ```
-Project 2/
-│
-├── Data-Classification-AI.py    
-└── README.md       
+Project-2/
+├── Data-CLassification-AI.py
+├── README.md
+└── .gitignore   
 ```
 
 ---
