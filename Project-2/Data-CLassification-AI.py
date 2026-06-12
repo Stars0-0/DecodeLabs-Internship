@@ -78,3 +78,13 @@ for i, row in enumerate(cm):
 print(f"\n Classification Report:")
 print(classification_report(y_test, predictions, target_names=iris_meta.target_names))
 
+#Prediction Example
+
+print(f"{'='*55}")
+print(f" LIVE PREDICTION — New Flower Sample")
+print(f"{'='*55}")
+new_flower = [[5.1, 3.5, 1.4, 0.2]]  # Known Setosa measurements
+new_flower_scaled = scaler.transform(new_flower)
+prediction = model.predict(new_flower_scaled)
+print(f"Input features: sepal=5.1x3.5cm, petal=1.4x0.2cm")
+print(f"Predicted class: {iris_meta.target_names[prediction[0]].upper()}")
