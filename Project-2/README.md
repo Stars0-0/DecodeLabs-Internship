@@ -19,10 +19,10 @@ This is the bridge from rule-based deterministic logic (Project 1) to data-drive
 | 📦 Dataset Loading | Iris benchmark dataset — 150 samples, 4 features, 3 classes |
 | ⚖️ Feature Scaling | StandardScaler (Mean=0, Variance=1) — prevents distance bias in KNN |
 | ✂️ Train-Test Split | 80/20 split with shuffle — removes order bias |
-| 🤖 KNN Classifier | K=5 neighbors, majority vote classification |
+| 🤖 KNN Classifier | Auto-selected optimal K (k=1 to 10) via accuracy comparison |
 | 🔢 Confusion Matrix | Full TP/FP/FN/TN breakdown per class |
 | 🎯 F1 Score | Weighted harmonic mean of Precision & Recall |
-| 🌸 Live Prediction | Classifies a brand-new unseen flower sample |
+| 🌸 Live Prediction | Classifies 3 brand-new unseen flower samples (one per class) |
 
 ---
 
@@ -31,18 +31,18 @@ This is the bridge from rule-based deterministic logic (Project 1) to data-drive
 The project follows the **IPO Framework** introduced in the DecodeLabs briefing:
 
 ```
-INPUT                    PROCESS                   OUTPUT
-─────────────────────────────────────────────────────────
-Iris Dataset         →   Train-Test Split (80/20)  →  Confusion Matrix
-Feature Scaling          KNN Algorithm (k=5)          F1 Score
-                         model.fit(X_train)            Live Prediction
+INPUT                    PROCESS                        OUTPUT
+──────────────────────────────────────────────────────────────
+Iris Dataset         →   Train-Test Split (80/20)   →  Confusion Matrix
+Feature Scaling          K Selection (k=1 to 10)       F1 Score
+                         KNN Algorithm (best k)         Live Prediction
+                         model.fit(X_train)
                          model.predict(X_test)
 ```
 
 **Why StandardScaler is mandatory for KNN:**
 ```
-Raw data:    sepal_length ≈ 5.0   petal_length ≈ 1.4   ← similar scale
-             BUT in other datasets features can range 0-1 vs 0-1000
+Raw data:    features can range 0-1 vs 0-1000 in real datasets
              → larger feature dominates distance calculation → biased model
 
 Scaled data: all features → Mean=0, Variance=1
@@ -53,54 +53,74 @@ Scaled data: all features → Mean=0, Variance=1
 
 ## 🚀 How to Run
 
-**Requirements:** Python 3.x + scikit-learn
+**Requirements:** Python 3.x
 
-# 1. Navigate to your project folder first
-cd ~/Documents/GitHub/DecodeLabs-Internship/Project-2/Data-CLassification-AI
+```bash
+# 1. Navigate to the project folder
+cd Project-2
 
-# 2. Create the virtual environment
+# 2. Create and activate a virtual environment
 python3 -m venv venv
-
-# 3. Activate it
 source venv/bin/activate
 
-# 4. Install scikit-learn
+# 3. Install dependency
 pip install scikit-learn
 
-# 5. Run your project
+# 4. Run the classifier
 python3 Data-CLassification-AI.py
+```
 
 **Expected Output:**
 ```
 =======================================================
    DecodeLabs Project 2 — KNN Data Classifier
 =======================================================
+ Dataset loaded: 150 samples, 4 features
+ Classes: ['setosa', 'versicolor', 'virginica']
+Sample row (raw): [5.1 3.5 1.4 0.2]
+Label:            setosa
 
-📦 Dataset loaded: 150 samples, 4 features
-🌸 Classes: ['setosa', 'versicolor', 'virginica']
+ Split: 120 training | 30 testing samples
+ Scaling applied: Mean=0, Variance = 1
+ Sample row (scaled): [-1.474  1.204 -1.563 -1.313]
 
-✂️  Split: 120 training | 30 testing samples
-⚖️  Scaling applied: Mean≈0, Variance≈1
-
-🤖 KNN model trained (k=5)
+🔍 Finding optimal K (testing k=1 to 10)...
+   k= 1  →  Accuracy: 100.0%
+   k= 2  →  Accuracy: 100.0%
+   ...
+   k=10  →  Accuracy: 100.0%
+ Selected k=10 — highest k with best accuracy (more generalised, less overfitting risk)
+ KNN model trained with k=10
 
 =======================================================
-📊 RESULTS
+         RESULTS
 =======================================================
-✅ Accuracy:  100.0%
-🎯 F1 Score:  1.0000  (1.0 = perfect)
+         Accuracy:  100.0%
+         F1 Score:  1.0000 (1.0 = perfect)
 
-🔢 Confusion Matrix:
-   (Rows=Actual, Cols=Predicted)
-   Classes: ['setosa', 'versicolor', 'virginica']
+ Confusion Matrix:
+  (Rows=Actual, Columns=Predicted)
+  Classes: ['setosa', 'versicolor', 'virginica']
 
-   setosa       [10  0  0]
-   versicolor   [ 0  9  0]
-   virginica    [ 0  0 11]
+  setosa       [10  0  0]
+  versicolor   [ 0  9  0]
+  virginica    [ 0  0 11]
 
-🌸 LIVE PREDICTION — New Flower Sample
-Input features: sepal=5.1x3.5cm, petal=1.4x0.2cm
-Predicted class: 👉 SETOSA
+ Classification Report:
+              precision    recall  f1-score   support
+      setosa       1.00      1.00      1.00        10
+  versicolor       1.00      1.00      1.00         9
+   virginica       1.00      1.00      1.00        11
+    accuracy                           1.00        30
+   macro avg       1.00      1.00      1.00        30
+weighted avg       1.00      1.00      1.00        30
+
+=======================================================
+ LIVE PREDICTION — New Flower Sample
+=======================================================
+   Input: [5.1, 3.5, 1.4, 0.2]  →  Predicted: SETOSA ✅
+   Input: [6.3, 3.3, 4.7, 1.6]  →  Predicted: VERSICOLOR ✅
+   Input: [6.3, 3.3, 6.0, 2.5]  →  Predicted: VIRGINICA ✅
 ```
 
 ---
@@ -124,7 +144,7 @@ Predicted class: 👉 SETOSA
 Project-2/
 ├── Data-CLassification-AI.py
 ├── README.md
-└── .gitignore   
+└── .gitignore
 ```
 
 ---
@@ -133,18 +153,22 @@ Project-2/
 
 | Metric | Score |
 |---|---|
-| Accuracy | ~96–100% |
-| F1 Score (weighted) | ~0.96–1.00 |
-| Algorithm | KNeighborsClassifier (k=5) |
+| Accuracy | 100.0% |
+| F1 Score (weighted) | 1.0000 |
+| Optimal K selected | k=10 |
+| Algorithm | KNeighborsClassifier |
 | Dataset | Iris (sklearn built-in) |
 
+> **Note:** 100% accuracy is expected on the Iris dataset — it is a clean,
+> balanced benchmark designed for algorithm validation. The key skill
+> demonstrated is the pipeline architecture, not the score itself.
+
 ---
-
-
 
 ## 👤 Author
 
 **Kristan Martinez**
 AI Engineering Intern — DecodeLabs Batch 2026
+🔗 [LinkedIn](#) | 🐙 [GitHub](#)
 
 ---
