@@ -55,21 +55,7 @@ Scaled data: all features → Mean=0, Variance=1
 
 **Requirements:** Python 3.x + scikit-learn
 
-```bash
 # 1. Navigate to your project folder first
-cd ~/Documents/GitHub/DecodeLabs-Internship/Data-CLassification-AI
-
-# 2. Create the virtual environment
-python3 -m venv venv
-
-# 3. Activate it
-source venv/bin/activate
-
-# 4. Install scikit-learn
-pip install scikit-learn
-
-# 5. Run your project
-python3 # 1. Navigate to your project folder first
 cd ~/Documents/GitHub/DecodeLabs-Internship/Project-2/Data-CLassification-AI
 
 # 2. Create the virtual environment
