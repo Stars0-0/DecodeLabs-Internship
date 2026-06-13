@@ -1,0 +1,21 @@
+job_role,skills
+Data Scientist,python machine_learning statistics data_analysis sql numpy pandas scikit_learn deep_learning visualization
+Machine Learning Engineer,python machine_learning deep_learning tensorflow pytorch algorithms data_structures scikit_learn mlops cloud
+AI Engineer,python deep_learning neural_networks nlp computer_vision tensorflow pytorch algorithms data_structures mlops
+Backend Developer,python java sql apis rest databases docker git algorithms data_structures
+Frontend Developer,javascript html css react nodejs git ui_design responsive_design apis typescript
+Full Stack Developer,javascript python html css react nodejs sql apis git docker databases
+DevOps Engineer,docker kubernetes aws linux bash ci_cd git cloud automation monitoring
+Cloud Architect,aws azure google_cloud docker kubernetes networking security infrastructure automation
+Data Engineer,python sql spark hadoop data_pipelines etl cloud databases airflow kafka
+Cybersecurity Analyst,networking security linux ethical_hacking cryptography firewalls risk_assessment penetration_testing
+Mobile Developer,java kotlin swift ios android react_native git apis ui_design
+Database Administrator,sql mysql postgresql mongodb indexing backup_recovery performance_tuning databases
+Systems Administrator,linux windows networking bash automation monitoring security server_management
+Software Engineer,python java algorithms data_structures git testing agile sql apis
+Data Analyst,python sql excel data_visualization statistics pandas tableau power_bi reporting
+NLP Engineer,python nlp deep_learning transformers bert text_processing linguistics pytorch tensorflow
+Computer Vision Engineer,python deep_learning computer_vision opencv tensorflow pytorch image_processing algorithms
+Robotics Engineer,python c++ ros algorithms control_systems embedded_systems sensors automation
+Blockchain Developer,solidity python javascript cryptography distributed_systems smart_contracts web3 algorithms
+Game Developer,c++ unity python game_design algorithms graphics_programming physics_engine
