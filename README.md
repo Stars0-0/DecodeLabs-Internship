@@ -18,9 +18,9 @@ The track progresses from pure rule-based logic → supervised machine learning 
 
 | # | Project | Concepts | Status |
 |---|---------|----------|--------|
-| 01 | [🤖 Rule-Based AI Chatbot](./Project-1-Rule-Based-Chatbot/) | IPO Model, Dictionary Lookup O(1), Input Sanitization, Control Flow, 3-Tier Response Engine | ✅ Complete |
-| 02 | [📊 Data Classification Using AI](./Project-2-Data-Classification-AI/) | Supervised Learning, KNN Algorithm, Train-Test Split, Feature Scaling, Confusion Matrix, F1 Score | ✅ Complete |
-| 03 | [🎯 AI Recommendation Engine](./Project-3-AI-Recommendation-Engine/) | Content-Based Filtering, TF-IDF Vectorization, Cosine Similarity, Top-N Ranking, Cold Start Problem | ✅ Complete |
+| 01 | [🤖 Rule-Based AI Chatbot](./Project-1/) | IPO Model, Dictionary Lookup O(1), Input Sanitization, Control Flow, 3-Tier Response Engine | ✅ Complete |
+| 02 | [📊 Data Classification Using AI](./Project-2/) | Supervised Learning, KNN Algorithm, Train-Test Split, Feature Scaling, Confusion Matrix, F1 Score | ✅ Complete |
+| 03 | [🎯 AI Recommendation Engine](./Project-3/) | Content-Based Filtering, TF-IDF Vectorization, Cosine Similarity, Top-N Ranking, Cold Start Problem | ✅ Complete |
 | 04 | 🔒 Project 4 *(coming soon)* | TBD | 🔒 Locked |
 
 ---
@@ -97,4 +97,3 @@ AI Engineering Intern — DecodeLabs Batch 2026
 
 ---
 
-*This portfolio was built project by project, starting June 2026. Every commit is a step forward. 🧠*
