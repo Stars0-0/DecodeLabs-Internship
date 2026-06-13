@@ -21,18 +21,35 @@ import os
 
 TOP_N       = 3       # Number of recommendations to show
 MIN_SCORE   = 0.05    # Minimum similarity score to qualify (cold start filter)
-DATA_FILE   = "raw_skills.csv"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "raw_skills.csv")
+
+ALIASES = {
+    "ml": "machine_learning",
+    "ai": "artificial_intelligence",
+    "js": "javascript",
+    "py": "python",
+}
+
 
 # PHASE 1: INPUT — Load Dataset & Ingest User Profile 
 
 def load_dataset(filepath: str) -> pd.DataFrame:
-    """Load job roles and their skill sets from CSV."""
     if not os.path.exists(filepath):
         raise FileNotFoundError(
             f"Dataset not found: '{filepath}'\n"
             "Make sure raw_skills.csv is in the same folder as this script."
         )
+
     df = pd.read_csv(filepath)
+
+    required = {"job_role", "skills"}
+    if not required.issubset(df.columns):
+        raise ValueError(
+            f"CSV must contain these columns: {required}"
+        )
+
     print(f" Dataset loaded: {len(df)} job roles found.")
     return df
 
@@ -53,7 +70,8 @@ def get_user_skills() -> str:
     skills = []
     while True:
         skill = input(f"  Skill {len(skills)+1}: ").strip().lower().replace(" ", "_")
-
+        skill=ALIASES.get(skill, skill)  # Map aliases to abrivated forms
+        
         if skill == "done":
             if len(skills) < 3:
                 print(f" !!  Need at least 3 skills. You have {len(skills)}. Keep going!")
@@ -72,33 +90,29 @@ def get_user_skills() -> str:
 
 # PHASE 2: PROCESS — TF-IDF + Cosine Similarity 
 
-def build_tfidf_matrix(df: pd.DataFrame, user_profile: str):
+def prepare_vectorizer(df: pd.DataFrame):
     """
-    Vector Mapping Step.
-    TF-IDF transforms all job role skill strings + user profile
-    into weighted numerical vectors in a shared vocabulary space.
-
-    CRITICAL: user profile must be vectorized in the SAME space
-    as the job roles — fitting on all documents together ensures
-    the vocabulary is shared.
+    Processing Step — TF-IDF vectorization.
+    Converts job role skills into a matrix of TF-IDF features.
+        - Each row = a job role
+        - Each column = a unique skill
+        - Cell value = importance of that skill for the role (0 to 1)
     """
-    # Combine job role skill strings with user profile
-    all_documents = list(df["skills"]) + [user_profile]
-
-    # TF-IDF Vectorizer
-    # - Penalizes generic skills that appear in every role (low IDF)
-    # - Rewards specific skills unique to fewer roles (high IDF)
     vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(all_documents).tocsr()
 
-    # Separate job role vectors from user vector
-    job_vectors  = tfidf_matrix[:-1]    # All rows except last = job roles
-    user_vector  = tfidf_matrix[-1]    # Last row = user profile
+    job_vectors = vectorizer.fit_transform(df["skills"])
+
     vocab_size = len(vectorizer.vocabulary_)
-    print(f"\n  TF-IDF vectorized: {vocab_size} unique skills in vocabulary")
-    print(f"   Each job role → vector of {vocab_size} weighted dimensions")
 
-    return job_vectors, user_vector
+    print(
+                f"\n TF-IDF prepared:"
+                f" {vocab_size} unique skills loaded."
+    )
+
+    return vectorizer, job_vectors
+
+def vectorize_user(vectorizer, user_profile: str):
+    return vectorizer.transform([user_profile])
 
 def score_and_rank(df: pd.DataFrame, job_vectors, user_vector) -> pd.DataFrame:
     """
@@ -156,7 +170,7 @@ def display_recommendations(df_sorted: pd.DataFrame, user_profile: str) -> None:
 
         # Score bar visualisation
         bar_length = int(score_pct / 5)
-        bar = "| " * bar_length + " :" * (20 - bar_length)
+        bar = "#" * bar_length + "-" * (20 - bar_length)
 
         print(f"\n  #{rank}  {role}")
         print(f"       Match Score : {score_pct:.1f}%")
@@ -167,9 +181,14 @@ def display_recommendations(df_sorted: pd.DataFrame, user_profile: str) -> None:
     print(f"\n{'-'*55}")
     print("   Full Ranking (all roles):")
     print(f"{'-'*55}")
+    
+    top_results = qualified.head(TOP_N)
+
+    cutoff = top_results.iloc[-1]["similarity_score"]
+    
     for _, row in df_sorted.iterrows():
         score_pct = row["similarity_score"] * 100
-        marker = " <-" if score_pct >= df_sorted.iloc[TOP_N-1]["similarity_score"] * 100 else ""
+        marker = (" <-"if row["similarity_score"] >= cutoff else "" )
         print(f"  {row['job_role']:<30} {score_pct:5.1f}%{marker}")
 
     print(f"\n   Tip: Add more specific skills to improve match accuracy.")
@@ -184,14 +203,15 @@ def main():
 
     # Load dataset
     df = load_dataset(DATA_FILE)
-
+    vectorizer, job_vectors = prepare_vectorizer(df)
+    
     # Run recommendation loop
     while True:
         # PHASE 1: Ingestion
         user_profile = get_user_skills()
 
         # PHASE 2: TF-IDF + Cosine Similarity
-        job_vectors, user_vector = build_tfidf_matrix(df, user_profile)
+        user_vector = vectorize_user(vectorizer, user_profile)
         df_scored = score_and_rank(df, job_vectors, user_vector)
 
         # PHASE 3: Top-N Output
@@ -201,7 +221,7 @@ def main():
         print(f"\n{'='*55}")
         again = input("  Try with different skills? (yes/no): ").strip().lower()
         if again not in ("yes", "y"):
-            print("\n  Recommendation engine shut down. Good luck! 🚀\n")
+            print("\n  Recommendation engine shut down. Good luck! \n")
             break
 
 if __name__ == "__main__":
