@@ -95,10 +95,10 @@ cd Project-3
 
 python3 -m venv venv
 
-##Linus
+#Linus
 source venv/bin/activate
 
-##Windows
+#Windows
 venv\Scripts\activate
 
 # 3. Install dependencies

@@ -61,7 +61,12 @@ cd Project-2
 
 # 2. Create and activate a virtual environment
 python3 -m venv venv
+
+#Linux
 source venv/bin/activate
+
+#Windows
+venv\Scripts\activate
 
 # 3. Install dependency
 pip install scikit-learn
